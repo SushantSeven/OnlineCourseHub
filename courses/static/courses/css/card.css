@@ -1,0 +1,27 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+.title-text{
+    font-family: 'Roboto', sans-serif;
+}
+.footer-text{
+    font-family: 'Roboto';
+}
+.price-text{
+    font-family: 'Roboto';
+    font-weight: bold;
+}
+.card-content{
+    background-color: white;
+    
+    border-radius: 5px;
+    box-shadow: 5px 5px 5px lightgray;
+}
+.card-content:hover{
+    background-color: whitesmoke;
+    
+}

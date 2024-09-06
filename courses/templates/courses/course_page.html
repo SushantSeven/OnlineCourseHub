@@ -1,0 +1,126 @@
+{% extends 'courses/base.html' %}
+<!-- loading js/css file -->
+{% load static %}
+{% load course_custom_tags %}
+
+{% block title %}
+courses
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'courses/js/course_page.js'%}"></script>
+{% endblock %}
+
+
+{% block css%}
+    <link rel="stylesheet" href="{% static 'courses/css/coursepage.css'%}">
+    <link rel="stylesheet" href="{% static 'courses/css/card.css'%}">
+{% endblock %}
+<script>
+    document.getElementById('run-script').addEventListener('click', function (event) {
+        event.preventDefault();
+
+        fetch('/run_script/', {
+            method: 'GET',
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.result);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+</script>
+
+{% block content %}
+
+<div class="container-fluid">
+    
+    <div>
+        <br>
+        <div class="card p-3">
+
+            <div class="row">
+                <!-- player -->
+                <div class="col ">
+                    <div class="player">
+                        
+                        <video class="embed-responsive embed-responsive-16by9" controls="controls">
+                            <source src="{{video.video.url}}" type="video/mp4"/>
+                        </video>
+                        
+                    </div>
+                </div>
+                <!-- lecture list -->
+                <div class="col-3 lecture-list">
+
+                    <ul id="video_list" class="list-group overflow-y-scroll">
+                        {% is_enrolled request course as enrolled %}
+                        {% for v in course.video_set.all %}
+                        <li class="list-group-item {% if v == video %} active-video {% endif %}">
+                            <a class="  
+                            {% if not enrolled and not v.is_preview %}text-muted no-preview{% endif %}
+                            {% if v == video %} active-video {% endif %}"
+                            
+                            href="?lecture={{v.serial_number}}">{{v}}</a>
+                        </li>
+                        {% endfor%}
+
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+        <div class="navigation">
+            {% if prev_lecture %}  
+            <div class="border"><a class="btn btn-primary" href="?lecture={{prev_lecture}}"><<</a></div> 
+            {% else %}
+            <div class="border"><a class="btn btn-primary disabled" href="javascript:void()"><<</a></div> 
+            {% endif %}
+            {% if next_lecture %}  
+            <div class="border"><a class="btn btn-primary" href="?lecture={{next_lecture}}">>></a></div> 
+            {% else %}
+            <div class="border"><a class="btn btn-primary disabled" href="javascript:void()">>></a></div> 
+            {% endif %}
+            </div>
+        <!-- course details -->
+        <div class="mt-3">
+            <div class="card">
+
+                <div class="card-body">
+                    <h5 class="card-title title-text">{{course.name}}</h5>
+                    <p class="card-text footer-text">{{course.description}}</p>
+
+                </div>
+            </div>
+        </div>
+        <div class="mt-3">
+            <div class="card">
+
+                <div class="card-body">
+                    <h5 class="card-title title-text">Prerequisite</h5>
+                    {% for pre in course.prerequisite_set.all %}
+                    <li class="footer-text">{{pre.description}}</li>
+                    {% endfor%}
+                </div>
+            </div>
+        </div>
+        <div class="mt-3">
+            <div class="card">
+
+                <div class="card-body">
+                    <h5 class="card-title title-text">learnings</h5>
+                    {% for l in course.learning_set.all %}
+                    <li class=" footer-text">{{l.description}}</li>
+                    {% endfor%}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card footer">
+        <a href="/run_script" id="run-script">download certificate</a>
+    </div>
+</div>
+
+{% endblock %}

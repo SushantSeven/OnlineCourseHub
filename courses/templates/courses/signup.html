@@ -1,0 +1,25 @@
+{% extends 'courses/base.html' %}
+{% load course_custom_tags %}
+{% load static %}
+{% block title %}
+Signup
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'courses/css/Login.css'%}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container login-card login-footer">
+
+        <!-- <h1 class="display-1"> Signup page</h1> -->
+        <div>
+            <form action="/signup" method="POST">
+                {% csrf_token %}
+                {{form.as_p}}
+                <input type="submit" class="btn btn-primary" value="Register">
+            </form>
+        </div>
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'courses/base.html' %}
+{% load course_custom_tags %}
+{% load static %}
+
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'courses/css/Login.css'%}">
+{% endblock %}
+
+{% block content %}
+
+
+<div class="container login-card">
+
+    <form action="" method="POST" class="login-form ">
+      {% csrf_token %}      
+            <div class="form-group user">
+              <div class="icon1"><label for="username"><i class="fa-solid fa-user" aria-hidden="true" style="color: #fafafa;"></i></label></div><input name="username" type="email"  class="form-control search-bar" required id="id_username"  aria-describedby="emailHelp" placeholder="Enter email">
+            </div>
+            <div class="form-group pass">
+              <div class="icon2"> <label for="password"><i class="fa fa-key" aria-hidden="true" style="color: #fafafa;"></i></div> <input name="password" type="password" class="form-control search-bar" required id="id_password" placeholder="Password">
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Login</button>
+       
+    </form>
+    <div class="login-footer">
+    <a href="/forgot_password">Forgot password</a><a class="nav-link" href="/signup">New User?</a>
+    </div>
+</div>
+
+
+{% endblock %}

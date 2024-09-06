@@ -1,0 +1,100 @@
+{% extends 'courses/base.html' %}
+{% load course_custom_tags %}
+{% load static %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'courses/css/card.css'%}">
+<link rel="stylesheet" href="{% static 'courses/css/search-sort.css'%}">
+{% endblock %}
+
+{% block search %}
+
+<ul>
+    <form method="POST" class="" action="{% url 'searched' %}">
+      {% csrf_token %}
+      <div class="search-contents">
+        <div>
+            <input type="search" placeholder="Search" name="searchfield" class="search-bar form-control">
+            </div>
+             <div>
+            <button type="submit" class="pointer"><i class="fa-solid fa-magnifying-glass" style="color: #fafafa;"></i></button>
+             </div>  
+      </div>    
+    </form>
+  </ul>
+
+{% endblock %}
+
+{% block dropdown%}
+<ul>
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle dropdown-content" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Filter
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="/filteratoz">A to Z</a>
+            <a class="dropdown-item" href="/filterztoa">Z to A</a>
+            <a class="dropdown-item" href="/lowtohigh">Price Low to High</a>
+            <a class="dropdown-item" href="/hightolow">Price Low to High</a>
+        </div>
+    </div>
+</ul>
+{% endblock %}
+{% block content %}
+
+<center>
+{% if searchfield %}
+    
+<div class="container-fluid"></div>
+
+<div class="row">
+
+    {% for course in searched_course %}
+<!-- card -->
+    <div class="col mx-auto">
+        <div class="card mx-auto card-content" style="width: 18rem;">
+            <img src="{{course.thumbnail.url}}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{course.name}}</h5>
+                <p class="card-text">
+                <p>save {{course.discount}}%
+                    <br>
+                    <span class="price">
+                        <del>{{course.price|rupee}}</del>
+                        &nbsp; <span>{% cal_sellprice course.price course.discount as value %} {{value|rupee}}</span>
+                </p>
+                </span></p>
+                <div class="card-footer p-0">
+                {% is_enrolled request course as enrolled %}
+
+                <div class="row no-gutters">
+                        {% if enrolled %}
+                        <div class="col border-right"><a class="btn btn-light btn-block" href="/course/{{course.slug}}">Start Course</a></div>
+                        {% else %}
+                        <div class="col border-right"><a class="btn btn-light btn-block" href="/check-out/{{course.slug}}">enroll now</a></div>
+                        <div class="col border"><a class="btn btn-light btn-block" href="/course/{{course.slug}}">show more</a></div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+    </div>
+
+    {% endfor %}
+</div>
+
+</div>
+{% else %}
+    <div class="container-fluid"></div>
+    <h3 class="display-1">Enter something to search</h3>
+    </div>
+
+{% endif %}
+</center>
+
+{% endblock %}
